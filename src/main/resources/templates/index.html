@@ -2,251 +2,262 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-
-    <title>Todo App</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Todo App</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
       rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
   </head>
-
   <body>
-    <div class="container mt-5">
-      <h2 class="mb-4 text-center">Todo Management</h2>
-
-      <!-- Add Todo -->
-      <form th:action="@{/add}" th:object="${todoRequest}" method="post">
-        <div class="row">
-          <div class="col-md-5">
-            <input
-              class="form-control"
-              placeholder="Title"
-              th:field="*{title}"
-            />
-            <div
-              class="text-danger mt-1"
-              th:if="${#fields.hasErrors('title')}"
-              th:errors="*{title}"
-            ></div>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="header-section mb-5 text-center">
+            <h1 class="display-5 fw-bold text-primary">TaskMaster</h1>
+            <p class="text-muted">
+              Quản lý công việc hàng ngày của bạn một cách hiệu quả
+            </p>
           </div>
 
-          <div class="col-md-5">
-            <input
-              class="form-control"
-              placeholder="Description"
-              th:field="*{description}"
-            />
-
-            <div
-              class="text-danger mt-1"
-              th:if="${#fields.hasErrors('description')}"
-              th:errors="*{description}"
-            ></div>
-          </div>
-
-          <div class="col-md-2">
-            <button class="btn btn-primary w-100">Add Todo</button>
-          </div>
-        </div>
-      </form>
-
-      <hr />
-
-      <div class="row mb-4">
-        <div class="col-md-4">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5>Total</h5>
-
-              <h2 th:text="${total}"></h2>
+          <div class="card add-todo-card mb-4 border-0 shadow-sm">
+            <div class="card-body p-4">
+              <form
+                th:action="@{/add}"
+                th:object="${todoRequest}"
+                method="post"
+              >
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <input
+                      class="form-control custom-input"
+                      placeholder="Tên công việc..."
+                      th:field="*{title}"
+                    />
+                    <small
+                      class="text-danger"
+                      th:if="${#fields.hasErrors('title')}"
+                      th:errors="*{title}"
+                    ></small>
+                  </div>
+                  <div class="col-md-6">
+                    <input
+                      class="form-control custom-input"
+                      placeholder="Mô tả chi tiết..."
+                      th:field="*{description}"
+                    />
+                    <small
+                      class="text-danger"
+                      th:if="${#fields.hasErrors('description')}"
+                      th:errors="*{description}"
+                    ></small>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-primary w-100 shadow-sm">
+                      <i class="fas fa-plus me-2"></i>Thêm
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5>Pending</h5>
-
-              <h2 th:text="${pending}"></h2>
+          <!-- Stats Section -->
+          <div class="row mb-4 g-3">
+            <div class="col-md-4">
+              <div class="stat-card total">
+                <div class="stat-icon"><i class="fas fa-list-ul"></i></div>
+                <div>
+                  <p class="mb-0 text-muted">Tổng cộng</p>
+                  <h3 class="fw-bold mb-0" th:text="${total}">0</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-card pending">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div>
+                  <p class="mb-0 text-muted">Đang chờ</p>
+                  <h3 class="fw-bold mb-0" th:text="${pending}">0</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-card completed">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div>
+                  <p class="mb-0 text-muted">Hoàn thành</p>
+                  <h3 class="fw-bold mb-0" th:text="${completed}">0</h3>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5>Completed</h5>
+          <div
+            class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3"
+          >
+            <div class="flex-grow-1">
+              <form method="get" th:action="@{/}">
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input
+                    name="keyword"
+                    class="form-control ps-5 custom-input"
+                    placeholder="Tìm kiếm công việc..."
+                  />
+                </div>
+              </form>
+            </div>
+            <div style="min-width: 200px">
+              <form method="get" th:action="@{/}">
+                <select
+                  class="form-select custom-input"
+                  name="status"
+                  onchange="this.form.submit()"
+                >
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="PENDING">Chưa xong</option>
+                  <option value="COMPLETED">Đã xong</option>
+                </select>
+              </form>
+            </div>
+          </div>
 
-              <h2 th:text="${completed}"></h2>
+          <div class="todo-list-container shadow-sm border-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="ps-4">Công việc</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end pe-4">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:if="${#lists.isEmpty(todos)}">
+                    <td colspan="3" class="text-center py-5 text-muted">
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/5089/5089733.png"
+                        width="80"
+                        class="mb-3 opacity-50"
+                      />
+                      <p>Không tìm thấy công việc nào!</p>
+                    </td>
+                  </tr>
+                  <tr th:each="todo : ${todos}">
+                    <td class="ps-4 py-3">
+                      <div
+                        th:class="${todo.status.name() == 'COMPLETED' ? 'text-decoration-line-through text-muted' : ''}"
+                      >
+                        <h6 class="mb-0 fw-bold" th:text="${todo.title}"></h6>
+                        <small
+                          class="text-muted"
+                          th:text="${todo.description}"
+                        ></small>
+                      </div>
+                    </td>
+                    <td>
+                      <span
+                        th:if="${todo.status.name()=='PENDING'}"
+                        class="badge rounded-pill bg-warning-soft text-warning"
+                      >
+                        <i class="fas fa-spinner fa-spin me-1"></i> Đang chờ
+                      </span>
+                      <span
+                        th:if="${todo.status.name()=='COMPLETED'}"
+                        class="badge rounded-pill bg-success-soft text-success"
+                      >
+                        <i class="fas fa-check me-1"></i> Hoàn thành
+                      </span>
+                    </td>
+                    <td class="text-end pe-4">
+                      <div class="btn-group">
+                        <a
+                          th:href="@{/toggle/{id}(id=${todo.id})}"
+                          class="btn btn-sm btn-light-success me-2"
+                          title="Đổi trạng thái"
+                        >
+                          <i
+                            th:class="${todo.status.name()=='PENDING' ? 'fas fa-check' : 'fas fa-undo'}"
+                          ></i>
+                        </a>
+                        <button
+                          class="btn btn-sm btn-light-primary edit-btn me-2"
+                          data-bs-toggle="modal"
+                          data-bs-target="#editModal"
+                          th:attr="data-id=${todo.id}, data-title=${todo.title}, data-description=${todo.description}"
+                        >
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <a
+                          class="btn btn-sm btn-light-danger"
+                          onclick="return confirm('Bạn chắc chắn muốn xóa?');"
+                          th:href="@{/delete/{id}(id=${todo.id})}"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Search + Filter -->
-
-      <div class="row mb-3">
-        <div class="col-md-8">
-          <form method="get" th:action="@{/}">
-            <div class="input-group">
-              <input
-                name="keyword"
-                class="form-control"
-                placeholder="Search by title..."
-              />
-
-              <button class="btn btn-dark">Search</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="col-md-4">
-          <form method="get" th:action="@{/}">
-            <select
-              class="form-select"
-              name="status"
-              onchange="this.form.submit()"
-            >
-              <option value="">Filter Status</option>
-
-              <option value="PENDING">Pending</option>
-
-              <option value="COMPLETED">Completed</option>
-            </select>
-          </form>
-        </div>
-      </div>
-
-      <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th>ID</th>
-
-            <th>Title</th>
-
-            <th>Description</th>
-
-            <th>Status</th>
-
-            <th width="260">Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr th:if="${#lists.isEmpty(todos)}">
-            <td colspan="5" class="text-center">No Todo Found</td>
-          </tr>
-
-          <tr th:each="todo : ${todos}">
-            <td th:text="${todo.id}"></td>
-
-            <td th:text="${todo.title}"></td>
-
-            <td th:text="${todo.description}"></td>
-
-            <td>
-              <span
-                class="badge bg-warning"
-                th:if="${todo.status.name()=='PENDING'}"
-              >
-                Pending
-              </span>
-
-              <span
-                class="badge bg-success"
-                th:if="${todo.status.name()=='COMPLETED'}"
-              >
-                Completed
-              </span>
-            </td>
-
-            <td>
-              <button
-                class="btn btn-warning btn-sm edit-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#editModal"
-                th:attr="
-                    data-id=${todo.id},
-                    data-title=${todo.title},
-                    data-description=${todo.description}
-                "
-              >
-                Edit
-              </button>
-
-              <a
-                class="btn btn-success btn-sm"
-                th:href="@{/toggle/{id}(id=${todo.id})}"
-              >
-                Toggle
-              </a>
-
-              <a
-                class="btn btn-danger btn-sm"
-                onclick="return confirm('Delete this todo?');"
-                th:href="@{/delete/{id}(id=${todo.id})}"
-              >
-                Delete
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <form id="editForm" method="post">
-            <div class="modal-header">
-              <h5 class="modal-title">Edit Todo</h5>
 
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <form id="editForm" method="post">
+            <div class="modal-header border-0">
+              <h5 class="modal-title fw-bold">Cập nhật công việc</h5>
               <button
                 type="button"
                 class="btn-close"
                 data-bs-dismiss="modal"
               ></button>
             </div>
-
             <div class="modal-body">
               <div class="mb-3">
-                <label class="form-label"> Title </label>
-
+                <label class="form-label fw-bold small">Tiêu đề</label>
                 <input
                   id="editTitle"
                   name="title"
-                  class="form-control"
+                  class="form-control custom-input"
                   required
                 />
               </div>
-
               <div class="mb-3">
-                <label class="form-label"> Description </label>
-
+                <label class="form-label fw-bold small">Mô tả</label>
                 <textarea
                   id="editDescription"
                   name="description"
-                  class="form-control"
+                  class="form-control custom-input"
                   rows="4"
-                >
-                </textarea>
+                ></textarea>
               </div>
             </div>
-
-            <div class="modal-footer">
+            <div class="modal-footer border-0">
               <button
-                class="btn btn-secondary"
+                class="btn btn-light"
                 type="button"
                 data-bs-dismiss="modal"
               >
-                Cancel
+                Hủy
               </button>
-
-              <button class="btn btn-primary" type="submit">
-                Save Changes
+              <button class="btn btn-primary px-4" type="submit">
+                Lưu thay đổi
               </button>
             </div>
           </form>
@@ -254,16 +265,13 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       document.querySelectorAll(".edit-btn").forEach((button) => {
         button.addEventListener("click", function () {
           document.getElementById("editTitle").value = this.dataset.title;
-
           document.getElementById("editDescription").value =
             this.dataset.description;
-
           document.getElementById("editForm").action =
             "/update/" + this.dataset.id;
         });
