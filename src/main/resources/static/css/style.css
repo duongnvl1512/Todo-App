@@ -1,0 +1,41 @@
+body{
+    background:#f4f6f9;
+}
+
+.container{
+    max-width:1100px;
+}
+
+h2{
+    font-weight:bold;
+}
+
+.card{
+    border:none;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.table{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.table thead{
+    background:#212529;
+    color:white;
+}
+
+.btn{
+    border-radius:8px;
+}
+
+.badge{
+    font-size:14px;
+    padding:8px 10px;
+}
+
+form{
+    margin-bottom:20px;
+}
